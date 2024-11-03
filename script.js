@@ -84,14 +84,23 @@ function expenseAdd(newExpense) {
             newExpense.amount.toUpperCase().replace("R$", "")
         }`
     
+        //Cria o icone de remover
+        const removeIcon = document.createElement("img")
+        removeIcon.classList.add("remove-icon")
+        removeIcon.setAttribute("src", "img/remove.svg")
+        removeIcon.setAttribute("alt", "remover")
+
         //Adiciona informações no item
-        expenseItem.append(expenseIcon, expenseInfo, expenseAmount)
+        expenseItem.append(expenseIcon, expenseInfo, expenseAmount, removeIcon)
 
         //Adiciona o item na lista.
         expenseList.append(expenseItem)
         
         //Atualiza quantidade de despesas
         updateTotals()
+
+        //Limpa formulario
+        formClear()
     
     } catch (error) {
         alert("Não foi possível atualizar a lista de despesas.")
@@ -150,4 +159,31 @@ function updateTotals(){
         console.log(error)
         alert("não foi possível atualizar os totais.")
     }
+}
+
+//Evento que captura o clique nos itens da lista.
+expenseList.addEventListener("click", function (event){
+    //Verifica se o elemento clicado é o icone de remover.
+    if(event.target.classList.contains("remove-icon")){
+        //Obtém a Li pai do elemento clicado
+        const item = event.target.closest(".expense")
+        
+        //remove o item da lista
+        item.remove()
+
+        //Atualiza o total
+        updateTotals()
+    }
+
+})
+
+function formClear() {
+    
+    //Limpa os campos do formulário
+    expense.value = ""
+    category.value = ""
+    amount.value = ""
+
+    //Coloca o foco no campo do formulario
+    expense.focus()
 }
