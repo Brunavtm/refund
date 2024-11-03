@@ -48,6 +48,7 @@ form.onsubmit = (event) =>{
     expenseAdd(newExpense)
 }
 
+//Adiciona um novo item na lista
 function expenseAdd(newExpense) {
     try {
         //Cria o elemento para adicionar o item - li - na lista - ul -
@@ -58,9 +59,31 @@ function expenseAdd(newExpense) {
         const expenseIcon = document.createElement("img")
         expenseIcon.setAttribute("src", `img/${newExpense.category_id}.svg`)
         expenseIcon.setAttribute("alt", newExpense.category_name)
+
+        //Cria a informação da despesa
+        const expenseInfo = document.createElement("div")
+        expenseInfo.classList.add("expense-info")
+
+        //Cria o nome da despesa
+        const expenseName = document.createElement("strong")
+        expenseName.textContent = newExpense.expense
+
+        //Cria a categoria da despesa
+        const expenseCategory = document.createElement("span")
+        expenseCategory.textContent = newExpense.category_name
+
+        //Adiciona name e category na div
+        expenseInfo.append(expenseName, expenseCategory)
+
+        //Cria valor da despensa
+        const expenseAmount = document.createElement("span")
+        expenseAmount.classList.add("expense-amount")
+        expenseAmount.innerHTML = `<small>R$</small>${
+            newExpense.amount.toUpperCase().replace("R$", "")
+        }`
     
         //Adiciona informações no item
-        expenseItem.append(expenseIcon)
+        expenseItem.append(expenseIcon, expenseInfo, expenseAmount)
 
         //Adiciona o item na lista.
         expenseList.append(expenseItem)
