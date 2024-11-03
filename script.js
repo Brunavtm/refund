@@ -7,6 +7,8 @@ const category = document.getElementById("category")
 
 //Seleciona os elementos da lista
 const expenseList = document.querySelector("ul")
+const expensesQuantity = document.querySelector("aside header p span")
+const expensesTotal = document.querySelector("aside header h2")
 
 //Captura o evento input
 amount.oninput = () => {
@@ -87,10 +89,65 @@ function expenseAdd(newExpense) {
 
         //Adiciona o item na lista.
         expenseList.append(expenseItem)
-    
+        
+        //Atualiza quantidade de despesas
+        updateTotals()
     
     } catch (error) {
         alert("Não foi possível atualizar a lista de despesas.")
         console.log(error)
+    }
+}
+
+function updateTotals(){
+    try {
+        //Recupera todos os itens da lista
+        const items = expenseList.children
+        
+        //Atualiza quantidade de despesas
+        expensesQuantity.textContent = `${items.length} ${
+            items.length > 1 ? "despesas" : "despesa"
+        }`
+
+        //Variavel para incrmentar o total
+        let total = 0
+
+        //Percorre cada item da lista
+        for (let item =0; item < items.length; item++) {
+            const itemAmount = items[item].querySelector(".expense-amount")
+
+            
+        //Remove caracteres não númericos e substitui virgula por ponto.
+            let value = itemAmount.textContent.replace(/[^\d,]/g, "").replace(",",".")
+        
+        //Converte valor para float
+        value = parseFloat(value)
+
+        //Verifica se é um número válido
+        if(isNaN(value)) {
+            return alert("Não foi possível calcular o total. O valor não parece um número.")
+        }
+
+        //Incrementa o valor total
+        total += Number(value)
+        
+        }
+
+        //Cria a span para adicionar o R$ formatado.
+        const symbolBRL = document.createElement("small")
+        symbolBRL.textContent = "R$"
+
+        //Formata o valor e remove o R$ exibido pela small
+        total = formatCurrencyBRL(total).toUpperCase().replace("R$", "")
+
+        //Limpa o conteudo do HMTL
+        expensesTotal.innerHTML = ""
+
+        //Adiciona o symbol e valor formatado
+        expensesTotal.append(symbolBRL, total)
+
+    } catch (error) {
+        console.log(error)
+        alert("não foi possível atualizar os totais.")
     }
 }
